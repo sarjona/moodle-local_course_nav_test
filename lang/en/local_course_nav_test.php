@@ -40,3 +40,4 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['nextactivity'] = 'Next activity';
 $string['pluginname'] = 'Course navigation test';
+$string['previousactivity'] = 'Previous activity';

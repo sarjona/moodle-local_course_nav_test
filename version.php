@@ -23,8 +23,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_course_nav_test';
-$plugin->release = 'alpha1';
-$plugin->version = 2015031200;
+$plugin->release = 'alpha2';
+$plugin->version = 2015031201;
 $plugin->requires = 2015030900;
 $plugin->maturity = MATURITY_ALPHA;
 $plugin->dependencies = [];

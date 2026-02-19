@@ -38,17 +38,53 @@ class hook_callbacks {
         after_standard_main_region_html_generation $hook
     ) {
         $cm = $hook->renderer->get_page()->cm;
-        if ($cm) {
+        if (!$cm) {
+            return;
+        }
+
+        $existsnext = method_exists(course_navigation::class, 'cm_next_element');
+        $existsprevious = method_exists(course_navigation::class, 'cm_previous_element');
+        if (!$existsnext && !$existsprevious) {
+            return;
+        }
+
+        if ($existsprevious) {
+            $prevmodule = util::get_path_for_callable([course_navigation::class, 'cm_previous_element'], [
+                'cm' => $cm->id,
+            ]);
+            $prevlink = html_writer::link(
+                $prevmodule,
+                get_string('previousactivity', 'local_course_nav_test'),
+                ['class' => 'btn btn-warning mx-3']
+            );
+        } else {
+            $prevlink = html_writer::link(
+                '',
+                get_string('previousactivity', 'local_course_nav_test'),
+                ['class' => 'btn mx-3 disabled']
+            );
+        }
+        if ($existsnext) {
             $nextmodule = util::get_path_for_callable([course_navigation::class, 'cm_next_element'], [
                 'cm' => $cm->id,
             ]);
-            $link = html_writer::link(
+            $nextlink = html_writer::link(
                 $nextmodule,
                 get_string('nextactivity', 'local_course_nav_test'),
                 ['class' => 'btn btn-warning mx-3']
             );
-            $div = html_writer::div($link, 'text-center sticky-bottom ms-auto py-3 bg-light');
-            $hook->add_html($div);
+        } else {
+            $nextlink = html_writer::link(
+                '',
+                get_string('nextactivity', 'local_course_nav_test'),
+                ['class' => 'btn mx-3 disabled']
+            );
         }
+
+        $div = html_writer::div(
+            $prevlink . $nextlink,
+            'd-flex justify-content-between sticky-bottom py-3 bg-light border-top',
+        );
+        $hook->add_html($div);
     }
 }
